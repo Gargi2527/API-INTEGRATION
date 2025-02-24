@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>News App</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background-color: #3fbbec;
+        }
+        .container {
+            align-items: center;
+            text-align: center;
+            background-color: #6498ad;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .news-list {
+            text-align: left;
+            margin-top: 20px;
+            min-height: 200px; /* Ensures the container has a minimum height */
+            overflow-y: auto;
+        }
+        .boxx{
+            padding: 10px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            background-color: #88cfec;
+        }
+        .btns{
+            display: flex;
+            justify-content: space-evenly;
+            align-items: center;
+        }
+        .btn{
+            width: auto;
+            border: 2px solid white; 
+            border-radius: 5px;
+            background-color: white;
+        }
+        .btn:hover{
+            cursor: pointer;
+            scale: 1.25 ;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="hh"><h1>Latest News</h1></div>
+        <div class="btns">
+            <div class="btn" onclick="getNews('sports')">Sports</div>
+            <div class="btn" onclick="getNews('weather')">Weather</div>
+            <div class="btn" onclick="getNews('entertainment')">Film Industry</div>
+            <div class="btn" onclick="getNews('business')">Budget</div>
+        </div>
+    </div>
+    <div id="news" class="news-list"></div>
+
+    <script>
+        async function getNews(category) {
+            const apiKey = 'be9e0ca5214d291674649254468b73c3'; // Replace with your News API key
+            const url = `https://gnews.io/api/v4/top-headlines?category=${category}&lang=en&country=in&token=${apiKey}`;
+            
+            try {
+                const response = await fetch(url);
+                const data = await response.json();
+                console.log(data);
+                
+                const newsContainer = document.getElementById('news');
+                newsContainer.innerHTML = '';
+                
+                data.articles.forEach(article => {
+                    const newsItem = document.createElement('p');
+                    newsItem.innerHTML = `<div class="boxx"><strong>${article.title}</strong><br/>${article.description}<br/><a href="${article.url}" target="_blank">Read more</a></div>`;
+                    newsContainer.appendChild(newsItem);
+                });
+
+            } catch (error) {
+                document.getElementById('news').innerText = 'Failed to fetch news';
+            }
+        }
+    </script>
+</body>
+</html>
